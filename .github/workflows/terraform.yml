@@ -14,16 +14,16 @@ jobs:
     name: "Terraform"
     runs-on: ubuntu-latest
     env:
-      # Credentials for Terraform Provider
-      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      # Backend Config (Partial config is better, but here we hardcoded in main.tf so we just need access)
-      
+      ARM_USE_CLI: true
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
