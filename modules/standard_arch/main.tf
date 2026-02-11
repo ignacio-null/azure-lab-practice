@@ -45,7 +45,7 @@ resource "azurerm_linux_web_app" "app" {
 
 # Cosmos DB (CONDICIONAL - Solo si create_database es true)
 resource "azurerm_cosmosdb_account" "db" {
-  count               = var.create_database ? 1 : 0 # Truco para hacerlo opcional
+  count = var.create_database ? 1 : 0 # Truco para hacerlo opcional
 
   name                = "${var.prefix}-${var.environment}-cosmos"
   location            = azurerm_resource_group.rg.location
@@ -78,23 +78,23 @@ resource "azurerm_consumption_budget_resource_group" "budget" {
   }
 
   notification {
-    enabled   = true
-    threshold = 50.0
-    operator  = "EqualTo"
+    enabled        = true
+    threshold      = 50.0
+    operator       = "EqualTo"
     contact_emails = [var.contact_email]
   }
 
   notification {
-    enabled   = true
-    threshold = 75.0
-    operator  = "EqualTo"
+    enabled        = true
+    threshold      = 75.0
+    operator       = "EqualTo"
     contact_emails = [var.contact_email]
   }
 
   notification {
-    enabled   = true
-    threshold = 100.0
-    operator  = "GreaterThanOrEqualTo"
+    enabled        = true
+    threshold      = 100.0
+    operator       = "GreaterThanOrEqualTo"
     contact_emails = [var.contact_email]
   }
 }

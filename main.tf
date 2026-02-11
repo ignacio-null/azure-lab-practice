@@ -24,14 +24,14 @@ provider "azurerm" {
 module "dev" {
   source = "./modules/standard_arch"
 
-  environment      = "dev"
-  location         = var.location
-  prefix           = var.prefix
-  contact_email    = var.contact_email
-  
+  environment   = "dev"
+  location      = var.location
+  prefix        = var.prefix
+  contact_email = var.contact_email
+
   # Config: Todo Gratis
   app_service_sku  = "F1"
-  create_database  = true  # <--- Creamos la DB Gratis aquí
+  create_database  = true # <--- Creamos la DB Gratis aquí
   enable_free_tier = false
   budget_amount    = 20
 }
@@ -42,15 +42,15 @@ module "dev" {
 module "qa" {
   source = "./modules/standard_arch"
 
-  environment      = "qa"
-  location         = var.location
-  prefix           = var.prefix
-  contact_email    = var.contact_email
-  
+  environment   = "qa"
+  location      = var.location
+  prefix        = var.prefix
+  contact_email = var.contact_email
+
   # Config: Ahorro Máximo
-  app_service_sku  = "F1"
-  create_database  = false # <--- NO creamos DB para no pagar
-  budget_amount    = 10
+  app_service_sku = "F1"
+  create_database = false # <--- NO creamos DB para no pagar
+  budget_amount   = 10
 }
 
 # ---------------------------------------------------------
@@ -59,11 +59,11 @@ module "qa" {
 module "prod" {
   source = "./modules/standard_arch"
 
-  environment      = "prod"
-  location         = var.location
-  prefix           = var.prefix
-  contact_email    = var.contact_email
-  
+  environment   = "prod"
+  location      = var.location
+  prefix        = var.prefix
+  contact_email = var.contact_email
+
   # Config: Simulación Enterprise (Pero barata)
   app_service_sku  = "B1"  # Para probar un tier de pago (destruir luego)
   enable_always_on = true  # Probamos feature de pago
