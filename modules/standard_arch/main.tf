@@ -159,4 +159,12 @@ resource "azurerm_cosmosdb_sql_container" "container" {
   partition_key_path  = "/category"
 }
 
+# Data Engineering: Azure Data Factory (Orchestrator)
+resource "azurerm_data_factory" "adf" {
+  name                = "${var.prefix}-${var.environment}-adf"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+
 
