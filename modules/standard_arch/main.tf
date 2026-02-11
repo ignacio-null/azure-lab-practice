@@ -125,5 +125,36 @@ resource "azurerm_application_insights" "appinsights" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   workspace_id        = azurerm_log_analytics_workspace.law.id
-  application_type    = "web"
+
+# Data Engineering: Storage Containers
+resource "azurerm_storage_container" "input" {
+  name                  = "input"
+  storage_account_name  = azurerm_storage_account.sa.name
+  container_access_type = "private"
 }
+
+
+resource "azurerm_storage_container" "output" {
+  name                  = "output"
+  storage_account_name  = azurerm_storage_account.sa.name
+  container_access_type = "private"
+}
+
+# Data Engineering: Cosmos DB SQL Structure (Dependent on create_database)
+resource "azurerm_cosmosdb_sql_database" "sql_db" {
+  count               = var.create_database ? 1 : 0
+  name                = "InventoryDB"
+  resource_group_name = azurerm_resource_group.rg.name
+  account_name        = azurerm_cosmosdb_account.db[0].name
+}
+
+resource "azurerm_cosmosdb_sql_container" "container" {
+  count               = var.create_database ? 1 : 0
+  name                = "Products"
+  resource_group_name = azurerm_resource_group.rg.name
+  account_name        = azurerm_cosmosdb_account.db[0].name
+  database_name       = azurerm_cosmosdb_sql_database.sql_db[0].name
+  partition_key_path  = "/category"
+}
+
+
