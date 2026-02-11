@@ -41,6 +41,11 @@ resource "azurerm_linux_web_app" "app" {
   site_config {
     always_on = var.enable_always_on
   }
+
+  app_settings = {
+    "APPINSIGHTS_INSTRUMENTATIONKEY"        = azurerm_application_insights.appinsights.instrumentation_key
+    "APPLICATIONINSIGHTS_CONNECTION_STRING" = azurerm_application_insights.appinsights.connection_string
+  }
 }
 
 # Cosmos DB (CONDICIONAL - Solo si create_database es true)
@@ -103,4 +108,22 @@ resource "random_string" "suffix" {
   length  = 4
   special = false
   upper   = false
+}
+
+# Log Analytics Workspace (Required for App Insights)
+resource "azurerm_log_analytics_workspace" "law" {
+  name                = "${var.prefix}-${var.environment}-law"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+
+# Application Insights
+resource "azurerm_application_insights" "appinsights" {
+  name                = "${var.prefix}-${var.environment}-ai"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  workspace_id        = azurerm_log_analytics_workspace.law.id
+  application_type    = "web"
 }
