@@ -33,7 +33,7 @@ module "dev" {
   app_service_sku  = "F1"
   create_database  = true # <--- Creamos la DB Gratis aquí
   enable_free_tier = false
-  budget_amount    = 20
+  budget_amount    = 25
 }
 
 # ---------------------------------------------------------
